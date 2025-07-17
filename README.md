@@ -37,6 +37,7 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 
 ## 📁 Project Structure
 
+<pre>
 ├── public/ # Static files
 ├── views/ # Frontend views
 ├── app.js # Main backend server
@@ -52,7 +53,8 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 ├── trust_policy.py # Ethics and fairness enforcement
 ├── upsell_predictor.py # Predicts upselling opportunities
 ├── sbilife.xlsx # Sample financial data
-└── README.md # You are here
+└── README.md
+</pre>
 
 ---
 
