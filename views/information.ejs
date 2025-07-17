@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== IMPROVED HEADER ===== */
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .progress-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .progress-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            height: 4rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            height: 5px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            color: white;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .card-container {
+            perspective: 200px;
+            height: 500px;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: absolute;
+            width: 100%;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        /* Updated card transitions - removed rotation */
+        .card.slide-out-left {
+            transform: translateX(-100%); /* Removed rotateY(-10deg) */
+            opacity: 0;
+        }
+
+        .card.slide-out-right {
+            transform: translateX(-100%); /* Removed rotateY(-10deg) */
+            opacity: 0;
+        }
+
+        .card.slide-in {
+            transform: translateX(0); /* Removed rotateY(0) */
+            opacity: 1;
+        }
+
+        .card.hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .option-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            min-width: 120px;
+        }
+
+        .option-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .completion-card {
+            background: linear-gradient(135deg, #ffffff 0%, #465f9b 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .completion-card .card-icon {
+            color: white;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .error-message {
+            color: #e74c3c;
+            background: #ffeaea;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid #ffc0c0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .card h2 {
+                font-size: 1.5rem;
+            }
+            
+            .option-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                Financial AI Hub
+            </div>
+            <div class="user-section">
+                <span class="welcome-text">Welcome, <%= username %>!</span>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="progress-header">
+            <h1>Complete Your Profile</h1>
+            <p>Let's gather some information to personalize your experience</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                Question <span id="currentQuestion">1</span> of <span id="totalQuestions">12</span>
+            </div>
+        </div>
+
+        <div class="card-container" id="cardContainer">
+            <!-- Cards will be generated dynamically -->
+        </div>
+    </div>
+
+    <script>
+        const QUESTION_CONFIG = {
+            'credit_score': {
+                'question': "What's your credit score?",
+                'description': "Please enter a number between 300-850",
+                'field': 'credit_score',
+                'type': 'input',
+                'input_type': 'number',
+                'icon': 'fas fa-credit-card',
+                'validation': (x) => {
+                    const num = parseInt(x);
+                    return !isNaN(num) && num >= 300 && num <= 850;
+                },
+                'error_msg': "Please enter a valid credit score between 300 and 850."
+            },
+            'geography': {
+                'question': "Which country are you from?",
+                'description': "Select your country of residence",
+                'field': 'geography',
+                'type': 'options',
+                'icon': 'fas fa-globe',
+                'options': ['France', 'Germany', 'Spain'],
+                'validation': (x) => ['France', 'Germany', 'Spain'].includes(x),
+                'error_msg': "Please choose from: France, Germany, or Spain."
+            },
+            'gender': {
+                'question': "What's your gender?",
+                'description': "This helps us personalize your experience",
+                'field': 'gender',
+                'type': 'options',
+                'icon': 'fas fa-user',
+                'options': ['Male', 'Female'],
+                'validation': (x) => ['Male', 'Female'].includes(x),
+                'error_msg': "Please select your gender."
+            },
+            'age': {
+                'question': "What's your age?",
+                'description': "Please enter a number between 18-100",
+                'field': 'age',
+                'type': 'input',
+                'input_type': 'number',
+                'icon': 'fas fa-birthday-cake',
+                'validation': (x) => {
+                    const num = parseInt(x);
+                    return !isNaN(num) && num >= 18 && num <= 100;
+                },
+                'error_msg': "Please enter a valid age between 18 and 100."
+            },
+            'marital_status': {
+                'question': "What's your marital status?",
+                'description': "This helps us understand your financial planning needs",
+                'field': 'marital_status',
+                'type': 'options',
+                'icon': 'fas fa-heart',
+                'options': ['Married', 'Single'],
+                'validation': (x) => ['Married', 'Single'].includes(x),
+                'error_msg': "Please select your marital status."
+            },
+            'salary': {
+                'question': "What's your annual salary?",
+                'description': "Enter your estimated yearly income",
+                'field': 'salary',
+                'type': 'input',
+                'input_type': 'number',
+                'icon': 'fas fa-dollar-sign',
+                'validation': (x) => {
+                    const num = parseFloat(x);
+                    return !isNaN(num) && num >= 0;
+                },
+                'error_msg': "Please enter a valid positive salary amount."
+            },
+            'tenure': {
+                'question': "How long have you been with the bank?",
+                'description': "Enter years (0-20)",
+                'field': 'tenure',
+                'type': 'input',
+                'input_type': 'number',
+                'icon': 'fas fa-calendar-alt',
+                'validation': (x) => {
+                    const num = parseInt(x);
+                    return !isNaN(num) && num >= 0 && num <= 20;
+                },
+                'error_msg': "Please enter tenure between 0 and 20 years."
+            },
+            'balance': {
+                'question': "What's your account balance?",
+                'description': "Enter your current account balance",
+                'field': 'balance',
+                'type': 'input',
+                'input_type': 'number',
+                'icon': 'fas fa-piggy-bank',
+                'validation': (x) => {
+                    const num = parseFloat(x);
+                    return !isNaN(num) && num >= 0;
+                },
+                'error_msg': "Please enter a valid positive balance amount."
+            },
+            'num_products': {
+                'question': "How many bank products do you have?",
+                'description': "Select the number of products (1-4)",
+                'field': 'num_products',
+                'type': 'options',
+                'icon': 'fas fa-list',
+                'options': ['1', '2', '3', '4'],
+                'validation': (x) => ['1', '2', '3', '4'].includes(x),
+                'error_msg': "Please select a number between 1 and 4."
+            },
+            'has_credit_card': {
+                'question': "Do you have a credit card with us?",
+                'description': "Let us know about your credit card status",
+                'field': 'has_credit_card',
+                'type': 'options',
+                'icon': 'fas fa-credit-card',
+                'options': ['Yes', 'No'],
+                'validation': (x) => ['Yes', 'No'].includes(x),
+                'error_msg': "Please select Yes or No."
+            },
+            'is_active': {
+                'question': "Are you an active member?",
+                'description': "Do you regularly use our services?",
+                'field': 'is_active',
+                'type': 'options',
+                'icon': 'fas fa-user-check',
+                'options': ['Yes', 'No'],
+                'validation': (x) => ['Yes', 'No'].includes(x),
+                'error_msg': "Please select Yes or No."
+            },
+            'exited': {
+                'question': "Have you ever left and returned?",
+                'description': "Did you previously close your account and come back?",
+                'field': 'exited',
+                'type': 'options',
+                'icon': 'fas fa-undo',
+                'options': ['Yes', 'No'],
+                'validation': (x) => ['Yes', 'No'].includes(x),
+                'error_msg': "Please select Yes or No."
+            }
+        };
+
+        class CardBasedProfile {
+            constructor() {
+                this.questionKeys = Object.keys(QUESTION_CONFIG);
+                this.currentQuestionIndex = 0;
+                this.answers = {};
+                this.cardContainer = document.getElementById('cardContainer');
+                this.progressFill = document.getElementById('progressFill');
+                this.currentQuestionSpan = document.getElementById('currentQuestion');
+                this.totalQuestions = document.getElementById('totalQuestions');
+                this.currentCard = null;
+
+                this.init();
+            }
+
+            init() {
+                this.totalQuestions.textContent = this.questionKeys.length;
+                this.createCard();
+                this.updateProgress();
+            }
+
+            createCard() {
+                if (this.currentQuestionIndex >= this.questionKeys.length) {
+                    this.showCompletionCard();
+                    return;
+                }
+
+                const questionKey = this.questionKeys[this.currentQuestionIndex];
+                const config = QUESTION_CONFIG[questionKey];
+
+                const card = document.createElement('div');
+                card.className = 'card slide-in';
+                card.innerHTML = this.getCardHTML(config);
+
+                this.cardContainer.appendChild(card);
+                this.currentCard = card;
+
+                // Add event listeners
+                this.addCardEventListeners(card, config);
+
+                // Animate in
+                setTimeout(() => {
+                    card.classList.add('slide-in');
+                }, 100);
+            }
+
+            getCardHTML(config) {
+                let inputHTML = '';
+                
+                if (config.type === 'input') {
+                    inputHTML = `
+                        <div class="input-group">
+                            <input type="${config.input_type}" class="input-field" id="userInput" 
+                                   placeholder="Enter ${config.field.replace('_', ' ')}..." />
+                        </div>
+                    `;
+                } else if (config.type === 'options') {
+                    inputHTML = `
+                        <div class="option-buttons">
+                            ${config.options.map(option => 
+                                `<button class="option-btn" data-value="${option}">${option}</button>`
+                            ).join('')}
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="card-icon">
+                        <i class="${config.icon}"></i>
+                    </div>
+                    <h2>${config.question}</h2>
+                    <p>${config.description}</p>
+                    ${inputHTML}
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                    <div class="card-actions">
+                        ${this.currentQuestionIndex > 0 ? '<button class="btn btn-secondary" id="prevBtn">Previous</button>' : ''}
+                        <button class="btn btn-primary" id="nextBtn" disabled>Continue</button>
+                    </div>
+                `;
+            }
+
+            addCardEventListeners(card, config) {
+                const nextBtn = card.querySelector('#nextBtn');
+                const prevBtn = card.querySelector('#prevBtn');
+                const errorMessage = card.querySelector('#errorMessage');
+
+                if (config.type === 'input') {
+                    const input = card.querySelector('#userInput');
+                    input.addEventListener('input', () => {
+                        const value = input.value.trim();
+                        nextBtn.disabled = !value;
+                        if (value && errorMessage.style.display !== 'none') {
+                            errorMessage.style.display = 'none';
+                        }
+                    });
+
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && !nextBtn.disabled) {
+                            this.handleNext(config, input.value.trim(), errorMessage);
+                        }
+                    });
+                } else if (config.type === 'options') {
+                    const optionBtns = card.querySelectorAll('.option-btn');
+                    optionBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            optionBtns.forEach(b => b.classList.remove('selected'));
+                            btn.classList.add('selected');
+                            nextBtn.disabled = false;
+                            if (errorMessage.style.display !== 'none') {
+                                errorMessage.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+
+                nextBtn.addEventListener('click', () => {
+                    let value;
+                    if (config.type === 'input') {
+                        value = card.querySelector('#userInput').value.trim();
+                    } else {
+                        const selected = card.querySelector('.option-btn.selected');
+                        value = selected ? selected.dataset.value : '';
+                    }
+                    this.handleNext(config, value, errorMessage);
+                });
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        this.handlePrevious();
+                    });
+                }
+            }
+
+            handleNext(config, value, errorMessage) {
+                if (!config.validation(value)) {
+                    errorMessage.textContent = config.error_msg;
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                // Process value
+                let processedValue = value;
+                if (config.field === 'credit_score' || config.field === 'age' || config.field === 'tenure') {
+                    processedValue = parseInt(value);
+                } else if (config.field === 'salary' || config.field === 'balance') {
+                    processedValue = parseFloat(value);
+                } else if (config.field === 'num_products') {
+                    processedValue = parseInt(value);
+                } else if (['has_credit_card', 'is_active', 'exited'].includes(config.field)) {
+                    processedValue = value === 'Yes' ? 'true' : 'false';
+                }
+
+                this.answers[config.field] = processedValue;
+                this.moveToNextCard();
+            }
+
+            handlePrevious() {
+                if (this.currentQuestionIndex > 0) {
+                    this.currentQuestionIndex--;
+                    this.moveToPreviousCard();
+                }
+            }
+
+            moveToNextCard() {
+                this.currentCard.classList.remove('slide-in');
+                this.currentCard.classList.add('slide-out-left');
+
+                setTimeout(() => {
+                    this.cardContainer.removeChild(this.currentCard);
+                    this.currentQuestionIndex++;
+                    this.updateProgress();
+                    this.createCard();
+                }, 600);
+            }
+
+            moveToPreviousCard() {
+                this.currentCard.classList.remove('slide-in');
+                this.currentCard.classList.add('slide-out-right');
+
+                setTimeout(() => {
+                    this.cardContainer.removeChild(this.currentCard);
+                    this.updateProgress();
+                    this.createCard();
+                }, 600);
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestionIndex / this.questionKeys.length) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                this.currentQuestionSpan.textContent = this.currentQuestionIndex + 1;
+            }
+
+            showCompletionCard() {
+                const card = document.createElement('div');
+                card.className = 'card completion-card slide-in';
+                card.innerHTML = `
+                    <div class="card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>🎉 Profile Complete!</h2>
+                    <p>Thank you for providing your information. We're setting up your personalized experience...</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" id="finishBtn">Go to Dashboard</button>
+                    </div>
+                `;
+
+                this.cardContainer.appendChild(card);
+                this.currentCard = card;
+
+                const finishBtn = card.querySelector('#finishBtn');
+                finishBtn.addEventListener('click', () => {
+                    this.submitProfile();
+                });
+
+                setTimeout(() => {
+                    card.classList.add('slide-in');
+                }, 100);
+            }
+
+            async submitProfile() {
+                try {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/information';
+                    
+                    for (const [key, value] of Object.entries(this.answers)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+                    
+                    document.body.appendChild(form);
+                    form.submit();
+                    
+                } catch (error) {
+                    console.error('Error saving profile:', error);
+                    alert('Sorry, there was an error saving your profile. Please try again or contact support.');
+                }
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CardBasedProfile();
+        });
+    </script>
+</body>
+</html>

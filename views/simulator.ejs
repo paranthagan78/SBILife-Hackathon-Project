@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Simulator with Smart Nudges</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ===== IMPROVED HEADER ===== */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text {
+            color: white;
+            font-weight: 500;
+            font-size: 1.15rem;
+            margin-right: 20px;
+            margin-bottom: 2px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .chatbot-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .chatbot-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0rem;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .reset-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .drag-pools {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .pool {
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .negative-pool {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: 2px solid #f97316;
+        }
+        
+        .positive-pool {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border: 2px solid #10b981;
+        }
+        
+        .pool h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .item.negative {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .item.positive {
+            border-left: 4px solid #10b981;
+        }
+        
+        .item-cost, .item-return {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .item-cost {
+            color: #ef4444;
+        }
+        
+        .item-return {
+            color: #10b981;
+        }
+        
+        .timeline-section {
+            margin-top: 2rem;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timeline-title {
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .timeline-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .year-block {
+            background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 1rem;
+            min-height: 120px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .year-block:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+        
+        .year-label {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dropped-item {
+            background: white;
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dropped-item.negative {
+            border-left: 3px solid #ef4444;
+            background: #fef2f2;
+        }
+        
+        .dropped-item.positive {
+            border-left: 3px solid #10b981;
+            background: #f0fdf4;
+        }
+        
+        .remove-item {
+            cursor: pointer;
+            color: #6b7280;
+            font-weight: bold;
+            padding: 0 0.25rem;
+        }
+        
+        .remove-item:hover {
+            color: #ef4444;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric-title {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .bars {
+            margin-top: 1rem;
+        }
+        
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .bar-container {
+            background: #f3f4f6;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .savings-bar {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        
+        .health-bar {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000;
+            max-width: 200px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Smart Nudges Styles */
+        .nudge-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            max-width: 350px;
+            z-index: 1001;
+        }
+        
+        .smart-nudge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: all 0.4s ease;
+            position: relative;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .smart-nudge.show {
+            transform: translateX(0);
+        }
+        
+        .nudge-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nudge-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .nudge-title {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .nudge-content {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+        
+        .nudge-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nudge-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nudge-btn.primary {
+            background: #ffd700;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .nudge-btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .nudge-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .nudge-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        
+        .nudge-close:hover {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .drag-pools {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-container {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
+            .nudge-container {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+  <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                Financial AI Hub
+            </div>
+            <div class="user-section">
+                <span class="welcome-text">Welcome, <%= username %>!</span>
+                <a href="/games" class="logout-btn">
+                    <i class="fas fa-gamepad"></i> Games
+                </a>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+  </header>
+
+  <div class="container">
+    <div class="chatbot-header">
+      <h1>Life Stage Financial Simulator</h1>
+      <p class="subtitle">Plan your financial journey and visualize how different life events impact your finances</p>
+    </div>
+
+    <div class="section controls">
+      <div class="input-group">
+        <label><i class="fas fa-rupee-sign"></i> Current Savings:</label>
+        <input type="number" id="savingsInput" value="500000" min="10000" />
+      </div>
+      <div class="input-group">
+        <label><i class="fas fa-calendar-alt"></i> Years to Simulate:</label>
+        <input type="number" id="yearsInput" value="10" min="1" max="40" />
+      </div>
+      <div class="input-group">
+        <label><i class="fas fa-money-bill"></i> Annual Income:</label>
+        <input type="number" id="incomeInput" value="800000" min="0" />
+      </div>
+      <button class="button" onclick="generateTimeline()"><i class="fas fa-play"></i> Generate Timeline</button>
+      <button class="button reset-button" onclick="resetSimulation()"><i class="fas fa-redo"></i> Reset</button>
+    </div>
+
+    <div class="section drag-pools">
+      <div class="pool negative-pool">
+        <h3><i class="fas fa-exclamation-circle"></i> Life Events (Expenses)</h3>
+        <div class="item negative" draggable="true" data-cost="300000" data-type="expense">
+          <span>Marriage</span>
+          <span class="item-cost">₹3,00,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="500000" data-type="expense">
+          <span>Higher Education</span>
+          <span class="item-cost">₹5,00,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="1500000" data-type="expense">
+          <span>Buy a House</span>
+          <span class="item-cost">₹15,00,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="700000" data-type="expense">
+          <span>Buy a Car</span>
+          <span class="item-cost">₹7,00,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="200000" data-type="expense">
+          <span>Major Health Expense</span>
+          <span class="item-cost">₹2,00,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="150000" data-type="expense">
+          <span>Family Vacation</span>
+          <span class="item-cost">₹1,50,000</span>
+        </div>
+        <div class="item negative" draggable="true" data-cost="100000" data-type="expense">
+          <span>Home Renovation</span>
+          <span class="item-cost">₹1,00,000</span>
+        </div>
+      </div>
+      <div class="pool positive-pool">
+        <h3><i class="fas fa-piggy-bank"></i> SBI Investment Options</h3>
+        <div class="item positive" draggable="true" data-return="7.1" data-type="investment">
+          <span>SBI PPF</span>
+          <span class="item-return">7.1% p.a.</span>
+        </div>
+        <div class="item positive" draggable="true" data-return="5.8" data-type="investment">
+          <span>SBI Fixed Deposit</span>
+          <span class="item-return">5.8% p.a.</span>
+        </div>
+        <div class="item positive" draggable="true" data-return="9.5" data-type="investment">
+          <span>SBI Retirement Plan</span>
+          <span class="item-return">9.5% p.a.</span>
+        </div>
+        <div class="item positive" draggable="true" data-return="10.2" data-type="investment">
+          <span>SBI Equity Fund</span>
+          <span class="item-return">10.2% p.a.</span>
+        </div>
+        <div class="item positive" draggable="true" data-return="8.7" data-type="investment">
+          <span>SBI Balanced Fund</span>
+          <span class="item-return">8.7% p.a.</span>
+        </div>
+        <div class="item positive" draggable="true" data-return="7.5" data-type="investment">
+          <span>SBI Tax Saver Fund</span>
+          <span class="item-return">7.5% p.a.</span>
+        </div>
+        <div class="item negative" draggable="true" data-return="6.4" data-type="investment">
+          <span>SBI Recurring Deposit</span>
+          <span class="item-return">6.4% p.a.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section timeline-section">
+      <div class="timeline-header">
+        <h2 class="timeline-title"><i class="fas fa-stream"></i> Your Financial Timeline</h2>
+        <div id="timelineInfo"></div>
+      </div>
+      <div class="timeline-container" id="timeline"></div>
+    </div>
+
+    <div class="section metrics">
+      <div class="metric-card">
+        <div class="metric-title"><i class="fas fa-rupee-sign"></i> Projected Savings</div>
+        <div class="metric-value" id="savingsValue">₹5,00,000</div>
+        <div class="bars">
+          <div class="bar-label">
+            <span>Growth Projection</span>
+            <span class="bar-value" id="savingsPercent">100%</span>
+          </div>
+          <div class="bar-container">
+            <div id="savingsBar" class="bar savings-bar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="metric-card">
+        <div class="metric-title"><i class="fas fa-heart"></i> Financial Health</div>
+        <div class="metric-value" id="healthValue">Excellent</div>
+        <div class="bars">
+          <div class="bar-label">
+            <span>Health Index</span>
+            <span class="bar-value" id="healthPercent">100%</span>
+          </div>
+          <div class="bar-container">
+            <div id="healthBar" class="bar health-bar" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Smart Nudges Container -->
+  <div class="nudge-container" id="nudgeContainer"></div>
+  
+  <div id="tooltip" class="tooltip"></div>
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // DOM Elements
+    const savingsBar = document.getElementById("savingsBar");
+    const healthBar = document.getElementById("healthBar");
+    const savingsInput = document.getElementById("savingsInput");
+    const yearsInput = document.getElementById("yearsInput");
+    const incomeInput = document.getElementById("incomeInput");
+    const timeline = document.getElementById("timeline");
+    const savingsValue = document.getElementById("savingsValue");
+    const savingsPercent = document.getElementById("savingsPercent");
+    const healthValue = document.getElementById("healthValue");
+    const healthPercent = document.getElementById("healthPercent");
+    const timelineInfo = document.getElementById("timelineInfo");
+    const tooltip = document.getElementById("tooltip");
+    const notification = document.getElementById("notification");
+    const nudgeContainer = document.getElementById("nudgeContainer");
+
+    // Financial state tracking
+    let initialSavings = parseInt(savingsInput.value);
+    let currentSavings = initialSavings;
+    let yearlyData = [];
+    let droppedItems = new Map();
+    let investmentBalances = new Map();
+    
+    // Smart nudging system
+    let userProfile = {
+      currentSavings: initialSavings,
+      annualIncome: parseInt(incomeInput.value),
+      yearsToSimulate: parseInt(yearsInput.value),
+      expensesAdded: [],
+      investmentsAdded: [],
+      lastIncomeChange: 0,
+      lastSavingsChange: 0,
+      behaviorPatterns: {
+        riskTolerance: 'moderate',
+        investmentFrequency: 0,
+        expenseFrequency: 0,
+        timeSpentSimulating: 0
+      }
+    };
+    
+    let nudgeHistory = new Set();
+    let activeNudges = new Map();
+    let nudgeIdCounter = 0;
+
+    // Initialize tooltip
+    document.addEventListener('mousemove', (e) => {
+      tooltip.style.left = (e.pageX + 15) + 'px';
+      tooltip.style.top = (e.pageY + 15) + 'px';
+    });
+
+    function showTooltip(content) {
+      tooltip.textContent = content;
+      tooltip.style.opacity = 1;
+    }
+
+    function hideTooltip() {
+      tooltip.style.opacity = 0;
+    }
+
+    function showNotification(message) {
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+      }).format(amount);
+    }
+
+    // Smart Nudging System
+    function createSmartNudge(type, title, content, actions = []) {
+      const nudgeId = ++nudgeIdCounter;
+      const nudgeKey = `${type}_${title}`;
+      
+      // Avoid duplicate nudges
+      if (nudgeHistory.has(nudgeKey)) return;
+      
+      const nudgeElement = document.createElement('div');
+      nudgeElement.className = 'smart-nudge';
+      nudgeElement.id = `nudge-${nudgeId}`;
+      
+      let actionsHtml = '';
+      if (actions.length > 0) {
+        actionsHtml = '<div class="nudge-actions">';
+        actions.forEach(action => {
+          actionsHtml += `<button class="nudge-btn ${action.type}" onclick="${action.onclick}">${action.text}</button>`;
+        });
+        actionsHtml += '</div>';
+      }
+      
+      nudgeElement.innerHTML = `
+        <button class="nudge-close" onclick="dismissNudge('${nudgeId}')">&times;</button>
+        <div class="nudge-header">
+          <div class="nudge-icon">💡</div>
+          <div class="nudge-title">Smart Nudge: ${title}</div>
+        </div>
+        <div class="nudge-content">${content}</div>
+        ${actionsHtml}
+      `;
+      
+      nudgeContainer.appendChild(nudgeElement);
+      activeNudges.set(nudgeId, nudgeElement);
+      
+      // Show nudge with animation
+      setTimeout(() => {
+        nudgeElement.classList.add('show');
+      }, 100);
+      
+      // Auto-dismiss after 15 seconds
+      setTimeout(() => {
+        dismissNudge(nudgeId);
+      }, 15000);
+      
+      nudgeHistory.add(nudgeKey);
+      return nudgeId;
+    }
+
+    function dismissNudge(nudgeId) {
+      const nudgeElement = activeNudges.get(parseInt(nudgeId));
+      if (nudgeElement) {
+        nudgeElement.classList.remove('show');
+        setTimeout(() => {
+          if (nudgeElement.parentNode) {
+            nudgeElement.parentNode.removeChild(nudgeElement);
+          }
+          activeNudges.delete(parseInt(nudgeId));
+        }, 400);
+      }
+    }
+
+    function analyzeUserBehavior() {
+      const currentIncome = parseInt(incomeInput.value);
+      const currentSavingsAmount = parseInt(savingsInput.value);
+      const currentYears = parseInt(yearsInput.value);
+      
+      // Track significant changes
+      const incomeChange = Math.abs(currentIncome - userProfile.annualIncome);
+      const savingsChange = Math.abs(currentSavingsAmount - userProfile.currentSavings);
+      
+      // Update user profile
+      userProfile.lastIncomeChange = incomeChange;
+      userProfile.lastSavingsChange = savingsChange;
+      userProfile.annualIncome = currentIncome;
+      userProfile.currentSavings = currentSavingsAmount;
+      userProfile.yearsToSimulate = currentYears;
+      
+      // Trigger contextual nudges
+      triggerContextualNudges();
+    }
+
+    function triggerContextualNudges() {
+      const incomeChangePercent = (userProfile.lastIncomeChange / userProfile.annualIncome) * 100;
+      const savingsChangePercent = (userProfile.lastSavingsChange / userProfile.currentSavings) * 100;
+      
+      // High income increase nudge
+      if (incomeChangePercent > 20) {
+        createSmartNudge(
+          'income_increase',
+          'Income Goal Increased',
+          `You've increased your income goal by ${formatCurrency(userProfile.lastIncomeChange)}. Higher income means higher investment potential!`,
+          [
+            {
+              text: 'Show High-Return Investments',
+              type: 'primary',
+              onclick: 'highlightHighReturnInvestments()'
+            },
+            {
+              text: 'Maybe Later',
+              type: 'secondary',
+              onclick: `dismissNudge(${nudgeIdCounter})`
+            }
+          ]
+        );
+      }
+      
+      // Low savings with high income nudge
+      if (userProfile.annualIncome > 1000000 && userProfile.currentSavings < 500000) {
+        createSmartNudge(
+          'savings_optimization',
+          'Optimize Your Savings',
+          `With an income of ${formatCurrency(userProfile.annualIncome)}, you could potentially save more. Consider increasing your savings rate.`,
+          [
+            {
+              text: 'Show Savings Tips',
+              type: 'primary',
+              onclick: 'showSavingsTips()'
+            }
+          ]
+        );
+      }
+      
+      // Long timeline with no investments nudge
+      if (userProfile.yearsToSimulate > 15 && userProfile.investmentsAdded.length === 0) {
+        createSmartNudge(
+          'long_term_planning',
+          'Long-term Growth Opportunity',
+          `Planning for ${userProfile.yearsToSimulate} years? Compound growth through investments could significantly boost your wealth.`,
+          [
+            {
+              text: 'Explore Long-term Investments',
+              type: 'primary',
+              onclick: 'highlightLongTermInvestments()'
+            }
+          ]
+        );
+      }
+      
+      // Risk-based nudging
+      analyzeRiskProfile();
+    }
+
+    function analyzeRiskProfile() {
+      const totalExpenses = userProfile.expensesAdded.reduce((sum, expense) => sum + expense.cost, 0);
+      const totalInvestments = userProfile.investmentsAdded.length;
+      
+      // Conservative investor nudge
+      if (totalInvestments > 0) {
+        const avgReturn = userProfile.investmentsAdded.reduce((sum, inv) => sum + inv.return, 0) / totalInvestments;
+        
+        if (avgReturn < 7 && userProfile.yearsToSimulate > 10) {
+          createSmartNudge(
+            'risk_optimization',
+            'Consider Higher Returns',
+            `Your average investment return is ${avgReturn.toFixed(1)}%. For long-term goals, higher-return options might serve you better.`,
+            [
+              {
+                text: 'Show Balanced Options',
+                type: 'primary',
+                onclick: 'highlightBalancedInvestments()'
+              }
+            ]
+          );
+        }
+      }
+      
+      // Major expense without protection nudge
+      const hasHouseExpense = userProfile.expensesAdded.some(exp => exp.text.includes('House'));
+      const hasHealthExpense = userProfile.expensesAdded.some(exp => exp.text.includes('Health'));
+      
+      if (hasHouseExpense && !hasHealthExpense) {
+        createSmartNudge(
+          'protection_planning',
+          'Protect Your Investment',
+          `You're planning to buy a house. Have you considered potential health expenses that could impact your plans?`,
+          [
+            {
+              text: 'Add Health Planning',
+              type: 'primary',
+              onclick: 'suggestHealthPlanning()'
+            }
+          ]
+        );
+      }
+    }
+
+    function highlightHighReturnInvestments() {
+      const highReturnItems = document.querySelectorAll('[data-return]');
+      highReturnItems.forEach(item => {
+        const returnRate = parseFloat(item.dataset.return);
+        if (returnRate >= 9) {
+          item.style.animation = 'pulse 2s infinite';
+          item.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.5)';
+        }
+      });
+      
+      createSmartNudge(
+        'highlight_response',
+        'High-Return Options Highlighted',
+        'Green-highlighted investments offer returns of 9% or higher, perfect for wealth building!',
+        []
+      );
+      
+      setTimeout(() => {
+        highReturnItems.forEach(item => {
+          item.style.animation = '';
+          item.style.boxShadow = '';
+        });
+      }, 5000);
+    }
+
+    function highlightLongTermInvestments() {
+      const longTermItems = document.querySelectorAll('[data-type="investment"]');
+      longTermItems.forEach(item => {
+        const text = item.querySelector('span').textContent;
+        if (text.includes('PPF') || text.includes('Retirement') || text.includes('Equity')) {
+          item.style.animation = 'pulse 2s infinite';
+          item.style.boxShadow = '0 0 15px rgba(102, 126, 234, 0.5)';
+        }
+      });
+      
+      setTimeout(() => {
+        longTermItems.forEach(item => {
+          item.style.animation = '';
+          item.style.boxShadow = '';
+        });
+      }, 5000);
+    }
+
+    function highlightBalancedInvestments() {
+      const balancedItems = document.querySelectorAll('[data-return]');
+      balancedItems.forEach(item => {
+        const returnRate = parseFloat(item.dataset.return);
+        if (returnRate >= 7 && returnRate <= 9) {
+          item.style.animation = 'pulse 2s infinite';
+          item.style.boxShadow = '0 0 15px rgba(245, 158, 11, 0.5)';
+        }
+      });
+      
+      setTimeout(() => {
+        balancedItems.forEach(item => {
+          item.style.animation = '';
+          item.style.boxShadow = '';
+        });
+      }, 5000);
+    }
+
+    function showSavingsTips() {
+      createSmartNudge(
+        'savings_tips',
+        'Savings Optimization Tips',
+        'Try the 50-30-20 rule: 50% needs, 30% wants, 20% savings. Automate transfers to make saving effortless!',
+        [
+          {
+            text: 'Increase Savings Goal',
+            type: 'primary',
+            onclick: 'increaseSavingsGoal()'
+          }
+        ]
+      );
+    }
+
+    function suggestHealthPlanning() {
+      const healthExpenseItem = document.querySelector('[data-cost="200000"]');
+      if (healthExpenseItem) {
+        healthExpenseItem.style.animation = 'pulse 2s infinite';
+        healthExpenseItem.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.5)';
+        
+        setTimeout(() => {
+          healthExpenseItem.style.animation = '';
+          healthExpenseItem.style.boxShadow = '';
+        }, 5000);
+      }
+    }
+
+    function increaseSavingsGoal() {
+      const currentSavings = parseInt(savingsInput.value);
+      const suggestedSavings = Math.round(currentSavings * 1.2);
+      savingsInput.value = suggestedSavings;
+      generateTimeline();
+      
+      createSmartNudge(
+        'savings_increased',
+        'Savings Goal Updated',
+        `Increased your savings to ${formatCurrency(suggestedSavings)}. Great choice for building wealth!`,
+        []
+      );
+    }
+
+    function triggerExpenseNudges(expenseType, cost, year) {
+      // Expensive purchase without emergency fund
+      if (cost > 500000) {
+        const finalSavings = yearlyData[yearlyData.length - 1]?.endingSavings || 0;
+        if (finalSavings < cost * 0.5) {
+          createSmartNudge(
+            'emergency_fund',
+            'Consider Emergency Planning',
+            `This ${formatCurrency(cost)} expense is significant. Building an emergency fund could help you manage such costs better.`,
+            [
+              {
+                text: 'Show Emergency Strategies',
+                type: 'primary',
+                onclick: 'showEmergencyStrategies()'
+              }
+            ]
+          );
+        }
+      }
+      
+      // Multiple expensive items in early years
+      const earlyYearExpenses = [];
+      for (let i = 1; i <= 5; i++) {
+        const yearItems = droppedItems.get(i) || [];
+        earlyYearExpenses.push(...yearItems.filter(item => item.cost > 300000));
+      }
+      
+      if (earlyYearExpenses.length >= 2) {
+        createSmartNudge(
+          'timing_optimization',
+          'Consider Timing Your Expenses',
+          'You have multiple large expenses in the first 5 years. Spreading them out could improve your financial stability.',
+          [
+            {
+              text: 'Show Timing Tips',
+              type: 'primary',
+              onclick: 'showTimingTips()'
+            }
+          ]
+        );
+      }
+    }
+
+    function triggerInvestmentNudges(investmentType, returnRate, year) {
+      // High-return investment in early years
+      if (returnRate > 9 && year <= 3) {
+        createSmartNudge(
+          'early_investment',
+          'Excellent Timing!',
+          `Starting with ${returnRate}% returns early gives compound growth more time to work. Consider adding more to this category.`,
+          []
+        );
+      }
+      
+      // Low-return investment with long timeline
+      if (returnRate < 6 && userProfile.yearsToSimulate > 15) {
+        createSmartNudge(
+          'return_optimization',
+          'Optimize for Long-term',
+          `With ${userProfile.yearsToSimulate} years ahead, you might benefit from higher-return investments. Time can help smooth out volatility.`,
+          [
+            {
+              text: 'Show Growth Options',
+              type: 'primary',
+              onclick: 'highlightHighReturnInvestments()'
+            }
+          ]
+        );
+      }
+    }
+
+    function showEmergencyStrategies() {
+      createSmartNudge(
+        'emergency_strategies',
+        'Emergency Fund Strategies',
+        'Build 6-12 months of expenses as emergency fund. Consider liquid investments like Fixed Deposits for easy access.',
+        []
+      );
+    }
+
+    function showTimingTips() {
+      createSmartNudge(
+        'timing_tips',
+        'Smart Timing Tips',
+        'Prioritize: Emergency fund → High-impact investments → Major purchases. This sequence maximizes your financial stability.',
+        []
+      );
+    }
+
+    function generateTimeline() {
+      timeline.innerHTML = "";
+      initialSavings = parseInt(savingsInput.value) || 500000;
+      currentSavings = initialSavings;
+      yearlyData = [];
+      droppedItems = new Map();
+      investmentBalances = new Map();
+
+      const years = parseInt(yearsInput.value) || 10;
+      const annualIncome = parseInt(incomeInput.value) || 800000;
+      
+      // Update user profile
+      userProfile.currentSavings = initialSavings;
+      userProfile.annualIncome = annualIncome;
+      userProfile.yearsToSimulate = years;
+      
+      // Initialize year data structure
+      for (let i = 1; i <= years; i++) {
+        yearlyData[i] = {
+          startingSavings: 0,
+          endingSavings: 0,
+          totalExpenses: 0,
+          totalReturns: 0,
+          items: []
+        };
+
+        // Create year block in timeline
+        const block = document.createElement("div");
+        block.className = "year-block";
+        block.id = `year-${i}`;
+        block.innerHTML = `<div class="year-label">Year ${i}</div>`;
+        
+        // Set up drag event handlers
+        block.ondragover = (e) => e.preventDefault();
+        block.ondrop = (e) => handleDrop(e, i);
+        
+        timeline.appendChild(block);
+        droppedItems.set(i, []);
+        investmentBalances.set(i, new Map());
+      }
+
+      // Calculate initial year data (without any events)
+      calculateAllYears();
+      updateFinancialMetrics();
+      timelineInfo.textContent = `Timeline created with ${years} years and initial savings of ${formatCurrency(initialSavings)}`;
+      
+      // Trigger behavioral analysis
+      analyzeUserBehavior();
+    }
+
+    function resetSimulation() {
+      yearlyData = [];
+      droppedItems = new Map();
+      investmentBalances = new Map();
+      
+      // Reset user profile
+      userProfile.expensesAdded = [];
+      userProfile.investmentsAdded = [];
+      
+      // Clear all active nudges
+      activeNudges.forEach((nudge, id) => {
+        dismissNudge(id);
+      });
+      
+      // Reset nudge history for new session
+      nudgeHistory.clear();
+      
+      generateTimeline();
+      showNotification("Simulation has been reset");
+    }
+
+    // Set up drag events for items
+    document.querySelectorAll(".item").forEach(item => {
+      item.addEventListener("dragstart", e => {
+        const itemType = e.target.dataset.type;
+        const itemData = {
+          text: e.target.querySelector('span').textContent,
+          cost: e.target.dataset.cost || 0,
+          return: e.target.dataset.return || 0,
+          type: itemType,
+          class: itemType === 'expense' ? 'negative' : 'positive'
+        };
+        e.dataTransfer.setData("text/plain", JSON.stringify(itemData));
+      });
+
+      // Show tooltip on hover
+      item.addEventListener("mouseenter", e => {
+        const cost = e.target.dataset.cost;
+        const returnRate = e.target.dataset.return;
+        let tooltipText = '';
+        
+        if (cost) {
+          tooltipText = `This expense will reduce your savings by ${formatCurrency(parseInt(cost))}`;
+        } else if (returnRate) {
+          tooltipText = `Expected annual return of ${returnRate}% on your investments`;
+        }
+        
+        showTooltip(tooltipText);
+      });
+
+      item.addEventListener("mouseleave", hideTooltip);
+    });
+
+    function handleDrop(e, year) {
+      e.preventDefault();
+      const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+      const dropZone = document.getElementById(`year-${year}`);
+      const itemId = `item-${year}-${Date.now()}`;
+
+      // Create the dropped item element
+      const newItem = document.createElement("div");
+      newItem.className = `dropped-item ${data.class}`;
+      newItem.id = itemId;
+      newItem.draggable = true;
+      
+      // Save original data as dataset attributes
+      newItem.dataset.cost = data.cost;
+      newItem.dataset.return = data.return;
+      newItem.dataset.type = data.type;
+      newItem.dataset.year = year;
+      
+      // Create item content with remove button
+      newItem.innerHTML = `
+        <span>${data.text}</span>
+        <span class="remove-item" title="Remove item">✕</span>
+      `;
+      
+      dropZone.appendChild(newItem);
+      
+      // Add to tracking
+      const itemData = {
+        id: itemId,
+        text: data.text,
+        cost: parseInt(data.cost) || 0,
+        return: parseFloat(data.return) || 0,
+        type: data.type
+      };
+      
+      droppedItems.get(year).push(itemData);
+      
+      // Update user profile
+      if (data.type === 'expense') {
+        userProfile.expensesAdded.push(itemData);
+        userProfile.behaviorPatterns.expenseFrequency++;
+        
+        // Trigger expense-specific nudges
+        triggerExpenseNudges(data.text, parseInt(data.cost) || 0, year);
+      } else {
+        userProfile.investmentsAdded.push(itemData);
+        userProfile.behaviorPatterns.investmentFrequency++;
+        
+        // Trigger investment-specific nudges
+        triggerInvestmentNudges(data.text, parseFloat(data.return) || 0, year);
+      }
+
+      // Recalculate all years from this point forward
+      calculateAllYears();
+      updateFinancialMetrics();
+      
+      // Set up event handlers for the dropped item
+      setupDroppedItemEvents(newItem, year, itemId);
+      
+      // Show notification
+      if (data.type === 'expense') {
+        showNotification(`Added expense: ${data.text} in Year ${year}`);
+      } else {
+        showNotification(`Added investment: ${data.text} in Year ${year}`);
+      }
+      
+      // Trigger post-action analysis
+      setTimeout(() => {
+        analyzeUserBehavior();
+      }, 1000);
+    }
+
+    function setupDroppedItemEvents(itemElement, year, itemId) {
+      // Make it draggable (for removal)
+      itemElement.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("id", itemId);
+        e.dataTransfer.setData("year", year);
+      });
+      
+      // Set up remove button click handler
+      const removeButton = itemElement.querySelector('.remove-item');
+      removeButton.addEventListener('click', () => {
+        removeItem(year, itemId);
+      });
+      
+      // Tooltip for dropped items
+      itemElement.addEventListener("mouseenter", e => {
+        const cost = itemElement.dataset.cost;
+        const returnRate = itemElement.dataset.return;
+        const type = itemElement.dataset.type;
+        
+        let tooltipText = '';
+        if (type === 'expense') {
+          tooltipText = `Expense: ${formatCurrency(parseInt(cost))}`;
+        } else {
+          tooltipText = `Investment with ${returnRate}% annual return`;
+        }
+        
+        showTooltip(tooltipText);
+      });
+      
+      itemElement.addEventListener("mouseleave", hideTooltip);
+    }
+
+    function removeItem(year, itemId) {
+      // Find the item in the tracking map
+      const yearItems = droppedItems.get(parseInt(year));
+      const itemIndex = yearItems.findIndex(item => item.id === itemId);
+      
+      if (itemIndex !== -1) {
+        const removedItem = yearItems[itemIndex];
+        
+        // Remove from DOM
+        const itemElement = document.getElementById(itemId);
+        if (itemElement) {
+          itemElement.remove();
+        }
+        
+        // Remove from tracking
+        yearItems.splice(itemIndex, 1);
+        
+        // Update user profile
+        if (removedItem.type === 'expense') {
+          const expenseIndex = userProfile.expensesAdded.findIndex(exp => exp.id === itemId);
+          if (expenseIndex !== -1) {
+            userProfile.expensesAdded.splice(expenseIndex, 1);
+          }
+        } else {
+          const investmentIndex = userProfile.investmentsAdded.findIndex(inv => inv.id === itemId);
+          if (investmentIndex !== -1) {
+            userProfile.investmentsAdded.splice(investmentIndex, 1);
+          }
+        }
+        
+        // Recalculate all years
+        calculateAllYears();
+        updateFinancialMetrics();
+        showNotification("Item removed from timeline");
+      }
+    }
+
+    function calculateAllYears() {
+      const years = parseInt(yearsInput.value) || 10;
+      const annualIncome = parseInt(incomeInput.value) || 800000;
+      const annualSavings = annualIncome * 0.2; // 20% savings rate
+      
+      // Reset investment balances
+      investmentBalances = new Map();
+      for (let i = 1; i <= years; i++) {
+        investmentBalances.set(i, new Map());
+      }
+      
+      for (let year = 1; year <= years; year++) {
+        // Starting savings for this year
+        let startingSavings = year === 1 ? initialSavings : yearlyData[year - 1].endingSavings;
+        
+        // Add annual savings
+        let currentYearSavings = startingSavings + annualSavings;
+        
+        let totalExpenses = 0;
+        let totalReturns = 0;
+        
+        // Process expenses for this year
+        const yearItems = droppedItems.get(year) || [];
+        yearItems.forEach(item => {
+          if (item.type === 'expense') {
+            totalExpenses += item.cost;
+            currentYearSavings -= item.cost;
+          }
+        });
+        
+        // Calculate investment returns only from previous year balances (not all previous years)
+        if (year > 1) {
+          const prevYearBalances = investmentBalances.get(year - 1);
+          if (prevYearBalances) {
+            prevYearBalances.forEach((balance, investmentName) => {
+              // Find the investment details from any year where it was added
+              let investmentItem = null;
+              for (let searchYear = 1; searchYear < year; searchYear++) {
+                const searchItems = droppedItems.get(searchYear) || [];
+                investmentItem = searchItems.find(item => 
+                  item.type === 'investment' && item.text === investmentName
+                );
+                if (investmentItem) break;
+              }
+              
+              if (investmentItem && balance > 0) {
+                const yearlyReturn = balance * (investmentItem.return / 100);
+                totalReturns += yearlyReturn;
+                currentYearSavings += yearlyReturn;
+                
+                // Carry forward the grown balance to this year
+                const grownBalance = balance + yearlyReturn;
+                investmentBalances.get(year).set(investmentName, grownBalance);
+              }
+            });
+          }
+        }
+
+        // Process new investments for this year (only process items actually dropped in this year)
+        yearItems.forEach(item => {
+          if (item.type === 'investment') {
+            // Only process if this investment balance doesn't already exist from previous years
+            if (!investmentBalances.get(year).has(item.text)) {
+              const investmentAmount = Math.min(currentYearSavings * 0.2, 300000); // 20% of savings, cap at 3L
+              if (investmentAmount > 0 && currentYearSavings >= investmentAmount) {
+                // Initialize this investment balance for this year
+                investmentBalances.get(year).set(item.text, investmentAmount);
+                currentYearSavings -= investmentAmount; // Deduct from available savings
+              }
+            }
+          }
+        });
+
+        // Carry forward existing investment balances to next year (with compound growth)
+        if (year < years) {
+          const currentBalances = investmentBalances.get(year);
+          const nextYearBalances = investmentBalances.get(year + 1);
+          
+          currentBalances.forEach((balance, investmentName) => {
+            if (balance > 0) {
+              // Only carry forward if not already set in next year
+              if (!nextYearBalances.has(investmentName)) {
+                nextYearBalances.set(investmentName, balance);
+              }
+            }
+          });
+        }
+        
+        // Ensure savings don't go negative
+        const endingSavings = Math.max(0, currentYearSavings);
+        
+        // Update yearly data
+        yearlyData[year] = {
+          startingSavings: startingSavings,
+          endingSavings: endingSavings,
+          totalExpenses: totalExpenses,
+          totalReturns: totalReturns,
+          items: [...yearItems]
+        };
+      }
+    }
+
+    function updateFinancialMetrics() {
+      const years = parseInt(yearsInput.value) || 10;
+      if (years <= 0 || !yearlyData[years]) return;
+      
+      // Get final year savings
+      const finalSavings = yearlyData[years].endingSavings;
+      currentSavings = finalSavings;
+      
+      // Calculate percent change from initial
+      const savingsChange = ((finalSavings - initialSavings) / initialSavings) * 100;
+      
+      // Update savings metrics
+      savingsValue.textContent = formatCurrency(finalSavings);
+      
+      if (savingsChange >= 0) {
+        savingsPercent.textContent = `+${savingsChange.toFixed(1)}%`;
+        savingsPercent.style.color = "#10b981";
+      } else {
+        savingsPercent.textContent = `${savingsChange.toFixed(1)}%`;
+        savingsPercent.style.color = "#ef4444";
+      }
+      
+      // Calculate bar width (0-100%)
+      const barWidth = Math.max(10, Math.min(100, 50 + (savingsChange / 4)));
+      savingsBar.style.width = `${barWidth}%`;
+      
+      // Calculate financial health (0-100)
+      const healthIndex = calculateHealthIndex(finalSavings, initialSavings, years);
+      const healthPercCapped = Math.max(0, Math.min(healthIndex, 100));
+      
+      // Update health metrics
+      healthBar.style.width = `${healthPercCapped}%`;
+      healthPercent.textContent = `${healthPercCapped.toFixed(0)}%`;
+      
+      // Set health status text and color
+      if (healthIndex >= 80) {
+        healthValue.textContent = "Excellent";
+        healthValue.style.color = "#10b981";
+      } else if (healthIndex >= 60) {
+        healthValue.textContent = "Good";
+        healthValue.style.color = "#22c55e";
+      } else if (healthIndex >= 40) {
+        healthValue.textContent = "Moderate";
+        healthValue.style.color = "#f59e0b";
+      } else if (healthIndex >= 20) {
+        healthValue.textContent = "Concerning";
+        healthValue.style.color = "#f97316";
+      } else {
+        healthValue.textContent = "Critical";
+        healthValue.style.color = "#ef4444";
+      }
+      
+      // Trigger health-based nudges
+      if (healthIndex < 40) {
+        createSmartNudge(
+          'health_warning',
+          'Financial Health Alert',
+          'Your financial health score is concerning. Consider reviewing your expense-to-investment ratio.',
+          [
+            {
+              text: 'Show Improvement Tips',
+              type: 'primary',
+              onclick: 'showHealthImprovementTips()'
+            }
+          ]
+        );
+      }
+    }
+
+    function showHealthImprovementTips() {
+      createSmartNudge(
+        'health_tips',
+        'Health Improvement Tips',
+        'Focus on: 1) Reduce high-cost expenses 2) Add long-term investments 3) Build emergency fund 4) Diversify investment portfolio',
+        []
+      );
+    }
+
+    function calculateHealthIndex(finalSavings, initialSavings, years) {
+      // Financial health calculation based on multiple factors
+      let healthScore = 50; // Base score
+      
+      // Factor 1: Growth rate
+      if (finalSavings > 0 && initialSavings > 0) {
+        const totalGrowthRate = (finalSavings / initialSavings) - 1;
+        const annualizedGrowth = Math.pow(1 + totalGrowthRate, 1/years) - 1;
+        
+        if (annualizedGrowth >= 0.10) {
+          healthScore += 40; // Excellent growth (10%+ annually)
+        } else if (annualizedGrowth >= 0.07) {
+          healthScore += 30; // Good growth (7-10% annually)
+        } else if (annualizedGrowth >= 0.05) {
+          healthScore += 20; // Decent growth (5-7% annually)
+        } else if (annualizedGrowth >= 0.03) {
+          healthScore += 10; // Moderate growth (3-5% annually)
+        } else if (annualizedGrowth >= 0) {
+          healthScore += 5; // Low positive growth
+        } else if (annualizedGrowth >= -0.05) {
+          healthScore -= 10; // Small decline
+        } else if (annualizedGrowth >= -0.10) {
+          healthScore -= 20; // Moderate decline
+        } else {
+          healthScore -= 30; // Severe decline
+        }
+      }
+      
+      // Factor 2: Final savings amount relative to initial
+      const savingsRatio = finalSavings / initialSavings;
+      if (savingsRatio >= 2.0) {
+        healthScore += 10; // Doubled savings
+      } else if (savingsRatio >= 1.5) {
+        healthScore += 5; // 50% increase
+      } else if (savingsRatio < 0.5) {
+        healthScore -= 15; // Lost more than half
+      }
+      
+      // Factor 3: Absolute savings level
+      if (finalSavings <= 0) {
+        healthScore = Math.min(healthScore, 15); // Cap at very poor if broke
+      } else if (finalSavings < initialSavings * 0.25) {
+        healthScore -= 10; // Very low savings remaining
+      }
+      
+      // Factor 4: Sustainability (check if there are negative savings in any year)
+      let hadNegativeSavings = false;
+      for (let year = 1; year <= years; year++) {
+        if (yearlyData[year] && yearlyData[year].endingSavings < 0) {
+          hadNegativeSavings = true;
+          break;
+        }
+      }
+      
+      if (hadNegativeSavings) {
+        healthScore -= 20; // Penalty for going into debt
+      }
+      
+      return Math.max(0, Math.min(healthScore, 100));
+    }
+
+    // Enable the target containers to accept dropped elements
+    document.body.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    document.body.addEventListener('drop', (e) => {
+      e.preventDefault();
+      
+      // Check if we're removing an item
+      const itemId = e.dataTransfer.getData('id');
+      const year = e.dataTransfer.getData('year');
+      
+      if (itemId && year) {
+        // Check if dropped outside of timeline (to remove)
+        const targetIsTimeline = e.target.closest('.timeline-container');
+        const targetIsYearBlock = e.target.closest('.year-block');
+        
+        if (!targetIsTimeline || !targetIsYearBlock) {
+          // Remove the item
+          removeItem(year, itemId);
+        }
+      }
+    });
+
+    // Event listeners for input changes with debouncing
+    let inputTimeout;
+    function handleInputChange() {
+      clearTimeout(inputTimeout);
+      inputTimeout = setTimeout(() => {
+        generateTimeline();
+      }, 500);
+    }
+
+    savingsInput.addEventListener("change", generateTimeline);
+    yearsInput.addEventListener("change", generateTimeline);
+    incomeInput.addEventListener("change", generateTimeline);
+    savingsInput.addEventListener("input", handleInputChange);
+    yearsInput.addEventListener("input", handleInputChange);
+    incomeInput.addEventListener("input", handleInputChange);
+
+    // Add CSS animation for pulse effect
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize timeline when page loads
+    generateTimeline();
+    
+    // Welcome nudge
+    setTimeout(() => {
+      createSmartNudge(
+        'welcome',
+        'Welcome to Smart Financial Planning',
+        'Start by adjusting your income and savings, then drag life events and investments to see how they impact your financial journey!',
+        [
+          {
+            text: 'Got it!',
+            type: 'primary',
+            onclick: `dismissNudge(${nudgeIdCounter})`
+          }
+        ]
+      );
+    }, 2000);
+  </script>
+</body>
+</html>

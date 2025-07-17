@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIA Operator Dashboard | Financial AI Hub</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ===== CORE LAYOUT & VARIABLES ===== */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --background-light: #f8fafc;
+            --background-white: #ffffff;
+            --border-light: #e2e8f0;
+            --text-primary: #2d3748;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 10px 30px rgba(102, 126, 234, 0.3);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --border-radius: 20px;
+            --border-radius-small: 12px;
+            --transition: all 0.3s ease;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
+            height: 100vh;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        /* ===== IMPROVED HEADER ===== */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+            height: 5rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text {
+            color: white;
+            font-weight: 500;
+            font-size: 1.15rem;
+            margin-right: 20px;
+            margin-bottom: 2px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .call-btn {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .call-btn:hover {
+            background: rgba(76, 175, 80, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            height: calc(100vh - 5rem);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ===== CUSTOMER TABS ===== */
+        .tabs-container {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            padding: 1rem;
+            border: 1px solid var(--border-light);
+        }
+
+        #chatTabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            min-height: 3rem;
+        }
+
+        .chat-tab {
+            padding: 0.75rem 1.25rem;
+            background: var(--background-light);
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-tab:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .chat-tab.selected {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success-color);
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.disconnected {
+            background: var(--error-color);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* ===== CHAT WINDOWS CONTAINER ===== */
+        .chat-container {
+            flex: 1;
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-heavy);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .no-customers {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            font-weight: 500;
+            background: var(--background-light);
+        }
+
+        .chat-window {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--background-light);
+            scroll-behavior: smooth;
+            list-style: none;
+            margin: 0;
+            display: none;
+        }
+
+        .chat-window::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-window::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .chat-window::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #cbd5e1, #94a3b8);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .chat-window::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #94a3b8, #64748b);
+        }
+
+        /* ===== MESSAGE STYLES ===== */
+        .chat-window li {
+            margin-bottom: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-small);
+            animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            word-wrap: break-word;
+            box-shadow: var(--shadow-light);
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .customer-message {
+            background: var(--background-white);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .customer-message.agent-response {
+            background: #f0f9ff;
+            border-left-color: #0ea5e9;
+            color: var(--text-primary);
+        }
+
+        .operator-message {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .operator-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .operator-error {
+            background: #fef2f2;
+            color: var(--error-color);
+            border: 1px solid #fecaca;
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* ===== INPUT SECTION ===== */
+        .input-container {
+            padding: 1.5rem;
+            background: var(--background-white);
+            border-top: 1px solid var(--border-light);
+        }
+
+        form {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border-light);
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            background: var(--background-light);
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            background: var(--background-white);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        form button {
+            padding: 1rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        form button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        form button:hover::before {
+            left: 100%;
+        }
+
+        form button:active {
+            transform: translateY(-1px);
+        }
+
+        form button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem 1rem;
+            }
+            
+            .header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .user-section {
+                gap: 0.5rem;
+            }
+            
+            .call-btn, .logout-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .welcome-text {
+                font-size: 0.9rem;
+                margin-right: 10px;
+            }
+            
+            #chatTabs {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .chat-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .chat-window {
+                padding: 1rem;
+            }
+            
+            .input-container {
+                padding: 1rem;
+            }
+            
+            .chat-input {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+            
+            form button {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .user-section {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .chat-window li {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== PERFORMANCE OPTIMIZATIONS ===== */
+        .chat-container,
+        .chat-tab,
+        .chat-input,
+        form button {
+            will-change: transform;
+        }
+
+        .chat-window li {
+            contain: layout style paint;
+        }
+
+        .chat-window {
+            contain: layout style;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                Financial AI Hub
+            </div>
+            <div class="user-section">
+                <div class="welcome-text">Welcome, <%= username %>!</div>
+                <a href="/home" class="logout-btn">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs-container">
+            <div id="customerTabs">
+                <ul id="chatTabs"></ul>
+            </div>
+        </div>
+        
+        <div class="chat-container">
+            <div id="chatWindows">
+                <div class="no-customers">No customers connected yet...</div>
+            </div>
+            
+            <div class="input-container">
+                <form>
+                    <input id="m" class="chat-input" autocomplete="off" placeholder="Type a message..." />
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        $(function () {
+            var socket = io('/tia_operator');
+            var connectedCustomers = {};
+            var currentTab;
+            
+            var messageObject = function(customerId, utterance) {
+                return { customerId: customerId, utterance: utterance };
+            };
+            
+            $('form').submit(function(e){
+                e.preventDefault();
+                
+                if(!currentTab) {
+                    alert('Please select a customer to send a message to');
+                    return false;
+                }
+                
+                if(currentTab && currentTab.disconnected) {
+                    alert('This customer has disconnected');
+                    return false;
+                }
+                
+                var messageText = $('#m').val().trim();
+                if(messageText === '') {
+                    return false;
+                }
+                
+                socket.emit('operator message', messageObject(currentTab.customerId, messageText));
+                $('#m').val('');
+                return false;
+            });
+
+            var setCurrentTab = function(target) {
+                if(currentTab === target) return;
+                currentTab = target;
+                $('li.chat-tab').removeClass('selected');
+                target.tab.addClass('selected');
+                $('.chat-window').hide();
+                $('.no-customers').hide();
+                target.window.show();
+            };
+
+            var createNewCustomerTab = function(customerId) {
+                var newChatElements = { customerId: customerId };
+                
+                newChatElements.tab = $('<li class="chat-tab">')
+                    .html('<span class="status-indicator"></span>' + customerId)
+                    .click(function() { setCurrentTab(newChatElements); });
+                    
+                newChatElements.window = $('<ul class="chat-window">').hide();
+                newChatElements.window.append($('<li class="customer-message">').text('--- Customer connected ---'));
+                
+                connectedCustomers[customerId] = newChatElements;
+                
+                if(!currentTab) {
+                    setCurrentTab(newChatElements);
+                }
+                
+                $('#chatTabs').append(newChatElements.tab);
+                $('#chatWindows').append(newChatElements.window);
+                $('.no-customers').hide();
+            };
+
+            var notifyOperatorRequest = function(customerId) {
+                if(connectedCustomers[customerId]) {
+                    setCurrentTab(connectedCustomers[customerId]);
+                    alert('Customer ' + customerId + ' has requested operator assistance!');
+                    // Add visual indication
+                    connectedCustomers[customerId].window.append(
+                        $('<li class="operator-message" style="background: #ffcdd2; color: #c62828;">')
+                        .text('🚨 OPERATOR ASSISTANCE REQUESTED 🚨')
+                    );
+                }
+            };
+
+            var notifyCustomerDisconnected = function(customerId) {
+                if(connectedCustomers[customerId]) {
+                    connectedCustomers[customerId].disconnected = true;
+                    connectedCustomers[customerId].tab.find('.status-indicator').addClass('disconnected');
+                    connectedCustomers[customerId].window.append(
+                        $('<li class="customer-message" style="background: #ffcdd2;">')
+                        .text('--- Customer disconnected ---')
+                    );
+                }
+            };
+
+            var notifySystemError = function(error) {
+                var errorText = (error.type === 'CustomerModeError') ? 
+                    error.message : 
+                    error.type + ' - ' + error.message;
+                    
+                if(currentTab) {
+                    currentTab.window.append($('<li class="operator-error">').text(errorText));
+                } else {
+                    alert('System Error: ' + errorText);
+                }
+            };
+
+            var receivedOperatorMessage = function(msg) {
+                var customer = connectedCustomers[msg.customerId];
+                if(customer) {
+                    customer.window.append($('<li class="operator-message">').text('You: ' + msg.utterance));
+                    // Auto scroll to bottom
+                    customer.window.scrollTop(customer.window[0].scrollHeight);
+                }
+            };
+
+            var receivedCustomerMessage = function(msg) {
+                if(connectedCustomers[msg.customerId]) {
+                    var prefix = msg.isAgentResponse ? 'Agent: ' : 'Customer: ';
+                    var messageElement = $('<li class="customer-message">')
+                        .toggleClass('agent-response', msg.isAgentResponse)
+                        .text(prefix + msg.utterance);
+                    
+                    connectedCustomers[msg.customerId].window.append(messageElement);
+                    
+                    // Auto scroll to bottom
+                    var windowElement = connectedCustomers[msg.customerId].window;
+                    windowElement.scrollTop(windowElement[0].scrollHeight);
+                }
+            };
+
+            // Socket event handlers
+            socket.on('customer connected', createNewCustomerTab);
+            socket.on('customer message', receivedCustomerMessage);
+            socket.on('operator requested', notifyOperatorRequest);
+            socket.on('operator message', receivedOperatorMessage);
+            socket.on('customer disconnected', notifyCustomerDisconnected);
+            socket.on('system error', notifySystemError);
+            
+            // Connection status
+            socket.on('connect', function() {
+                console.log('Connected to operator interface');
+            });
+            
+            socket.on('disconnect', function() {
+                console.log('Disconnected from operator interface');
+            });
+        });
+    </script>
+</body>
+</html>
