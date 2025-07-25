@@ -35,6 +35,13 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 
 ---
 
+### Model Architexture
+
+<img width="1686" height="927" alt="image" src="https://github.com/user-attachments/assets/fa5c5a80-4686-4877-bb39-9831dc698c92" />
+<img width="1809" height="898" alt="image" src="https://github.com/user-attachments/assets/91091a36-8c69-4f6a-a788-65ef940e6269" />
+
+---
+
 ## 📁 Project Structure
 
 <pre>
@@ -65,6 +72,18 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 - **AI/ML**: Scikit-learn, Sentiment Analysis
 - **Database**: Sqlite
 - **Other**: Excel-based datasets, TOTP security
+
+---
+
+Screenshots of Interface
+
+<img width="1886" height="902" alt="image" src="https://github.com/user-attachments/assets/26b063fe-c8b8-4f0e-b859-ee2700c6f3d5" />
+<img width="1917" height="902" alt="image" src="https://github.com/user-attachments/assets/c0c0365a-a782-43d8-aa32-6aaac74527a9" />
+<img width="1917" height="900" alt="image" src="https://github.com/user-attachments/assets/0ae679ee-2c08-4501-9151-47ece6201592" />
+<img width="1896" height="900" alt="image" src="https://github.com/user-attachments/assets/537660a0-af74-45cc-8882-cd31e0d452a9" />
+<img width="1890" height="899" alt="image" src="https://github.com/user-attachments/assets/faa5ab50-79a3-4395-b037-f839674b7dbb" />
+
+
 
 ---
 
