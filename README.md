@@ -11,12 +11,19 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 
 ---
 
+## Demonstration video
+
 ## Screenshots of Interface
 
 <img width="1886" height="902" alt="image" src="https://github.com/user-attachments/assets/26b063fe-c8b8-4f0e-b859-ee2700c6f3d5" />
 <img width="1917" height="902" alt="image" src="https://github.com/user-attachments/assets/c0c0365a-a782-43d8-aa32-6aaac74527a9" />
 <img width="1917" height="900" alt="image" src="https://github.com/user-attachments/assets/0ae679ee-2c08-4501-9151-47ece6201592" />
 <img width="1896" height="900" alt="image" src="https://github.com/user-attachments/assets/537660a0-af74-45cc-8882-cd31e0d452a9" />
+
+
+<img width="1892" height="947" alt="image" src="https://github.com/user-attachments/assets/618aa1bd-06f3-4963-a83e-e88d5cc5e3f3" />
+<img width="1894" height="962" alt="image" src="https://github.com/user-attachments/assets/f53346e2-d205-4757-b3f2-0df23ac0322c" />
+
 <img width="1890" height="899" alt="image" src="https://github.com/user-attachments/assets/faa5ab50-79a3-4395-b037-f839674b7dbb" />
 <img width="1896" height="906" alt="image" src="https://github.com/user-attachments/assets/3387d0db-67e7-48b8-8ef2-7015569239b6" />
 <img width="1887" height="909" alt="image" src="https://github.com/user-attachments/assets/3df20903-5d03-499c-b9a6-8f8a366e9d1d" />
