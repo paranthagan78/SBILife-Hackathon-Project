@@ -6,14 +6,11 @@
 ---
 
 ## 🧠 Overview
-
 Developed an AI Driven Personalization Platform for SBI Life as part of a hackathon project. The goal was to enhance policy personalization, upselling, customer engagement, and trust through AI-powered solutions. The platform combines recommendation engines, AI chatbots, gamification, real-time analytics, and ethical AI practices to create an interactive and transparent customer experience.
 
 ---
 
-## Demonstration video
-
-## Screenshots of Interface
+## 🖼 Screenshots of Interface
 
 <img width="1886" height="902" alt="image" src="https://github.com/user-attachments/assets/26b063fe-c8b8-4f0e-b859-ee2700c6f3d5" />
 <img width="1917" height="902" alt="image" src="https://github.com/user-attachments/assets/c0c0365a-a782-43d8-aa32-6aaac74527a9" />
@@ -34,47 +31,40 @@ Developed an AI Driven Personalization Platform for SBI Life as part of a hackat
 
 ## ✨ Key Features
 
-## 🔐 Authentication & Security
+### 🔐 Authentication & Security
+- **Dual Login System:** Separate portals for customers and agents  
+- **Multi-Factor Authentication (MFA):** TOTP-based security using Google Authenticator  
+- **Profile Management:** Comprehensive user profile setup for first-time users  
 
-**Dual Login System:** Separate portals for customers and agents
-**Multi-Factor Authentication (MFA):** TOTP-based security using Google Authenticator
-**Profile Management:** Comprehensive user profile setup for first-time users
+### 🎯 Smart Policy Recommender
+- **RAG-based Policy Recommendations:** Personalized insurance policy suggestions using Retrieval-Augmented Generation  
+- **Trust Policy Score:** Explainable AI that builds customer confidence through transparent recommendation reasoning  
+- **Policy Upselling Engine:** AI-powered cross-selling and upgrade suggestions to maximize customer value  
 
-## 🎯 Smart Policy Recommender
+### 🤖 TalkSmart Chatbot (TIA)
+- **Multilingual Support:** Contextual customer support in multiple languages  
+- **Intelligent Query Handling:** Advanced NLP for understanding complex customer queries  
+- **24/7 Availability:** Round-the-clock customer assistance  
 
-**RAG-based Policy Recommendations:** Personalized insurance policy suggestions using Retrieval-Augmented Generation
-**Trust Policy Score:** Explainable AI that builds customer confidence through transparent recommendation reasoning
-**Policy Upselling Engine:** AI-powered cross-selling and upgrade suggestions to maximize customer value
+### 🎮 Interactive Financial Tools
+- **Financial Simulator:** A gamified tool for financial planning and scenario modeling that helps users explore different financial strategies in an engaging way.  
+- **Goal GPS:** An interactive goal-setting and tracking game that allows users to set, adjust, and achieve their financial objectives through a fun experience.  
+- **AI Powered Nudges:** Intelligent, real-time suggestions during gameplay to help users adjust goals, amounts, and timelines for improved financial outcomes.  
 
-## 🤖 TalkSmart Chatbot (TIA)
+### 📊 InsureInsights Dashboard
+- **Predictive Analytics:** Advanced insights for business intelligence  
+- **Campaign AI Optimization:** Automated marketing campaign enhancement  
+- **Real-time Engagement Metrics:** Live tracking of user interactions and performance  
+- **Inspirational Stories:** Customer success stories to drive motivation  
 
-**Multilingual Support:** Contextual customer support in multiple languages
-**Intelligent Query Handling:** Advanced NLP for understanding complex customer queries
-**24/7 Availability:** Round-the-clock customer assistance
-
-## 🎮 Interactive Financial Tools
-
-**Financial Simulator:** A gamified tool for financial planning and scenario modeling that helps users explore different financial strategies in an engaging way.
-**Goal GPS:** An interactive goal-setting and tracking game that allows users to set, adjust, and achieve their financial objectives through a fun experience.
-**AI Powered Nudges**: Intelligent, real-time suggestions during gameplay to help users adjust goals, amounts, and timelines for improved financial outcomes.
-
-## 📊 InsureInsights Dashboard
-
-**Predictive Analytics:** Advanced insights for business intelligence
-**Campaign AI Optimization:** Automated marketing campaign enhancement
-**Real-time Engagement Metrics:** Live tracking of user interactions and performance
-**Inspirational Stories:** Customer success stories to drive motivation
-
-## 💬 FinChat Assistant
-
-**General Financial Knowledge:** Comprehensive financial information chatbot
-**Educational Content:** Answers to financial queries and learning resources
-**Contextual Responses:** Tailored information based on user profile and history
+### 💬 FinChat Assistant
+- **General Financial Knowledge:** Comprehensive financial information chatbot  
+- **Educational Content:** Answers to financial queries and learning resources  
+- **Contextual Responses:** Tailored information based on user profile and history  
 
 ---
 
-### Model Architexture
-
+### 🏗 Model Architecture
 <img width="1686" height="927" alt="image" src="https://github.com/user-attachments/assets/fa5c5a80-4686-4877-bb39-9831dc698c92" />
 <img width="1809" height="898" alt="image" src="https://github.com/user-attachments/assets/91091a36-8c69-4f6a-a788-65ef940e6269" />
 
@@ -104,79 +94,69 @@ Developed an AI Driven Personalization Platform for SBI Life as part of a hackat
 ---
 
 ## 🔄 User Flow
-## Customer Journey
-
-Login/Registration → Profile Setup (first-time users)
-Dashboard Access → Feature Selection
-Smart Recommendations → Policy Exploration
-Interactive Tools → Financial Planning
-Chat Support → Query Resolution
-Insights & Analytics → Progress Tracking
+### Customer Journey:
+1. Login/Registration → Profile Setup (first-time users)  
+2. Dashboard Access → Feature Selection  
+3. Smart Recommendations → Policy Exploration  
+4. Interactive Tools → Financial Planning  
+5. Chat Support → Query Resolution  
+6. Insights & Analytics → Progress Tracking  
 
 ---
 
 ## 📈 Business Impact
-
-**Increased Customer Engagement:** Gamified tools drive user interaction
-**Improved Conversion Rates:** AI-powered recommendations boost sales
-**Enhanced Customer Satisfaction:** Multilingual support and personalization
-**Data-Driven Decision Making:** Comprehensive analytics and insights
-**Operational Efficiency:** Automated processes and intelligent routing
+- **Increased Customer Engagement:** Gamified tools drive user interaction  
+- **Improved Conversion Rates:** AI-powered recommendations boost sales  
+- **Enhanced Customer Satisfaction:** Multilingual support and personalization  
+- **Data-Driven Decision Making:** Comprehensive analytics and insights  
+- **Operational Efficiency:** Automated processes and intelligent routing  
 
 ---
 
 ## ⚙️ Tech Stack
-
-- **Backend**: Node.js, Python, REST API
-- **Frontend**: HTML, CSS, JS, Streamlit
-- **AI/ML**: Scikit-learn, Sentiment Analysis, RAG
-- **Database & Security**: Sqlite, TOTP (Time-based One-Time Password)
+- **Backend:** Node.js, Python, REST API  
+- **Frontend:** HTML, CSS, JS, Streamlit  
+- **AI/ML:** Scikit-learn, Sentiment Analysis, RAG  
+- **Database & Security:** SQLite, TOTP (Time-based One-Time Password)  
 
 ---
 
 ## 🎯 Future Scope
-## Phase 1: Enhanced AI Capabilities
 
-Advanced ML Models: Implementation of deep learning for better predictions
-Voice Integration: Voice-enabled chatbot interactions
-Computer Vision: Document analysis and claim processing automation
-Blockchain Integration: Secure policy management and claim verification
+### Phase 1: Enhanced AI Capabilities
+- Advanced ML Models: Implementation of deep learning for better predictions  
+- Voice Integration: Voice-enabled chatbot interactions  
+- Computer Vision: Document analysis and claim processing automation  
+- Blockchain Integration: Secure policy management and claim verification  
 
-## Phase 2: Platform Expansion
+### Phase 2: Platform Expansion
+- Mobile Application: Native iOS and Android apps  
+- API Marketplace: Third-party integrations and partnerships  
+- Microservices Architecture: Scalable system redesign  
+- Cloud Migration: AWS/Azure deployment for better scalability  
 
-Mobile Application: Native iOS and Android apps
-API Marketplace: Third-party integrations and partnerships
-Microservices Architecture: Scalable system redesign
-Cloud Migration: AWS/Azure deployment for better scalability
+### Phase 3: Advanced Features
+- IoT Integration: Smart device data for personalized pricing  
+- Augmented Reality: Virtual policy consultations  
+- Predictive Analytics: Advanced risk assessment models  
+- Social Features: Community-driven financial planning  
 
-## Phase 3: Advanced Features
+### Phase 4: Global Expansion
+- Multi-Currency Support: International market expansion  
+- Regulatory Compliance: Region-specific insurance regulations  
+- Localization: Cultural adaptation for different markets  
+- Partnership Ecosystem: Insurance provider network expansion  
 
-IoT Integration: Smart device data for personalized pricing
-Augmented Reality: Virtual policy consultations
-Predictive Analytics: Advanced risk assessment models
-Social Features: Community-driven financial planning
-
-## Phase 4: Global Expansion
-
-Multi-Currency Support: International market expansion
-Regulatory Compliance: Region-specific insurance regulations
-Localization: Cultural adaptation for different markets
-Partnership Ecosystem: Insurance provider network expansion
-
-## Phase 5: Innovation Lab
-
-Quantum Computing: Advanced risk calculations
-AI Ethics Framework: Responsible AI implementation
-Sustainability Metrics: Environmental impact tracking
-Research & Development: Continuous innovation pipeline
+### Phase 5: Innovation Lab
+- Quantum Computing: Advanced risk calculations  
+- AI Ethics Framework: Responsible AI implementation  
+- Sustainability Metrics: Environmental impact tracking  
+- Research & Development: Continuous innovation pipeline  
 
 ---
 
 ## 👥 Team
-
-- Paranthagan S
-- Pranaav U
-- Padmapriya C
-- Nandana M
-  
----
+- Paranthagan S  
+- Pranaav U  
+- Padmapriya C  
+- Nandana M  
