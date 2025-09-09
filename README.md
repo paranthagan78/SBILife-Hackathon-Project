@@ -1,13 +1,13 @@
-# 💡 Sankalpa - AI-Powered Personalization for SBI Life Insurance
+# Sankalpa - AI-Powered Personalization for SBI Life Insurance
 
-## 🏁 Problem Statement
+## Problem Statement
 **Enhancing Customer Experience and Retention through AI-Driven Personalization to Improve the Propensity to Purchase**
 
 ---
 
 ## 🧠 Overview
 
-Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-AI-THON 2024**, aimed at revolutionizing how customers interact with insurance services. It leverages AI to deliver personalized campaigns, real-time financial insights, predictive policy recommendations, and intelligent virtual advisors.
+Developed an AI Driven Personalization Platform for SBI Life as part of a hackathon project. The goal was to enhance policy personalization, upselling, customer engagement, and trust through AI-powered solutions. The platform combines recommendation engines, AI chatbots, gamification, real-time analytics, and ethical AI practices to create an interactive and transparent customer experience.
 
 ---
 
@@ -32,28 +32,44 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 
 ---
 
+## ✨ Key Features
 
-## 🔍 Key Features
+## 🔐 Authentication & Security
 
-### 🎯 Personalization & Engagement
-- **Hyper-Personalized Campaigns** for micro-segments with automated A/B testing
-- **Emotion-Aware Offers** using sentiment analysis
-- **Milestone Rewards** & **Wellness Cashback**
+**Dual Login System:** Separate portals for customers and agents
+**Multi-Factor Authentication (MFA):** TOTP-based security using Google Authenticator
+**Profile Management:** Comprehensive user profile setup for first-time users
 
-### 🤖 Virtual Advisors
-- **Interactive AI Chatbot** to explain policy details, upsell, and assist in real-time
-- **Virtual Financial Coach** for planning and goal tracking
-- **Goal GPS** for financial journey mapping
+## 🎯 Smart Policy Recommender
 
-### 📈 Intelligence & Automation
-- **Predictive Remarketing** to re-engage high-value customers
-- **Smart Nudges** to prevent drop-offs
-- **Fraud Detection** using anomaly detection
+**RAG-based Policy Recommendations:** Personalized insurance policy suggestions using Retrieval-Augmented Generation
+**Trust Policy Score:** Explainable AI that builds customer confidence through transparent recommendation reasoning
+**Policy Upselling Engine:** AI-powered cross-selling and upgrade suggestions to maximize customer value
 
-### 🧠 Ethical & Real-Time AI
-- **Ethical AI Toolkit** (XAI and privacy-respecting practices)
-- **Real-Time Campaign Metrics**
-- **Policy Simulator** for visualizing premium-benefit changes
+## 🤖 TalkSmart Chatbot (TIA)
+
+**Multilingual Support:** Contextual customer support in multiple languages
+**Intelligent Query Handling:** Advanced NLP for understanding complex customer queries
+**24/7 Availability:** Round-the-clock customer assistance
+
+## 🎮 Interactive Financial Tools
+
+**Financial Simulator:** A gamified tool for financial planning and scenario modeling that helps users explore different financial strategies in an engaging way.
+**Goal GPS:** An interactive goal-setting and tracking game that allows users to set, adjust, and achieve their financial objectives through a fun experience.
+**AI Powered Nudges**: Intelligent, real-time suggestions during gameplay to help users adjust goals, amounts, and timelines for improved financial outcomes.
+
+## 📊 InsureInsights Dashboard
+
+**Predictive Analytics:** Advanced insights for business intelligence
+**Campaign AI Optimization:** Automated marketing campaign enhancement
+**Real-time Engagement Metrics:** Live tracking of user interactions and performance
+**Inspirational Stories:** Customer success stories to drive motivation
+
+## 💬 FinChat Assistant
+
+**General Financial Knowledge:** Comprehensive financial information chatbot
+**Educational Content:** Answers to financial queries and learning resources
+**Contextual Responses:** Tailored information based on user profile and history
 
 ---
 
@@ -87,13 +103,72 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 
 ---
 
+## 🔄 User Flow
+## Customer Journey
+
+Login/Registration → Profile Setup (first-time users)
+Dashboard Access → Feature Selection
+Smart Recommendations → Policy Exploration
+Interactive Tools → Financial Planning
+Chat Support → Query Resolution
+Insights & Analytics → Progress Tracking
+
+---
+
+## 📈 Business Impact
+
+**Increased Customer Engagement:** Gamified tools drive user interaction
+**Improved Conversion Rates:** AI-powered recommendations boost sales
+**Enhanced Customer Satisfaction:** Multilingual support and personalization
+**Data-Driven Decision Making:** Comprehensive analytics and insights
+**Operational Efficiency:** Automated processes and intelligent routing
+
+---
+
 ## ⚙️ Tech Stack
 
-- **Backend**: Node.js, Python
+- **Backend**: Node.js, Python, REST API
 - **Frontend**: HTML, CSS, JS, Streamlit
-- **AI/ML**: Scikit-learn, Sentiment Analysis
-- **Database**: Sqlite
-- **Other**: Excel-based datasets, TOTP security
+- **AI/ML**: Scikit-learn, Sentiment Analysis, RAG
+- **Database & Security**: Sqlite, TOTP (Time-based One-Time Password)
+
+---
+
+## 🎯 Future Scope
+## Phase 1: Enhanced AI Capabilities
+
+Advanced ML Models: Implementation of deep learning for better predictions
+Voice Integration: Voice-enabled chatbot interactions
+Computer Vision: Document analysis and claim processing automation
+Blockchain Integration: Secure policy management and claim verification
+
+## Phase 2: Platform Expansion
+
+Mobile Application: Native iOS and Android apps
+API Marketplace: Third-party integrations and partnerships
+Microservices Architecture: Scalable system redesign
+Cloud Migration: AWS/Azure deployment for better scalability
+
+## Phase 3: Advanced Features
+
+IoT Integration: Smart device data for personalized pricing
+Augmented Reality: Virtual policy consultations
+Predictive Analytics: Advanced risk assessment models
+Social Features: Community-driven financial planning
+
+## Phase 4: Global Expansion
+
+Multi-Currency Support: International market expansion
+Regulatory Compliance: Region-specific insurance regulations
+Localization: Cultural adaptation for different markets
+Partnership Ecosystem: Insurance provider network expansion
+
+## Phase 5: Innovation Lab
+
+Quantum Computing: Advanced risk calculations
+AI Ethics Framework: Responsible AI implementation
+Sustainability Metrics: Environmental impact tracking
+Research & Development: Continuous innovation pipeline
 
 ---
 
@@ -105,9 +180,3 @@ Sankalpa is a smart, hyper-personalized platform developed for **SBI Life HACK-A
 - Nandana M
   
 ---
-
-## 📌 Future Scope
-
-- Integration with **real-time fitness trackers** for wellness rewards  
-- **Voice-enabled assistant** via Twilio or WebRTC  
-- **Explainable AI (XAI)** visual layer for transparency
