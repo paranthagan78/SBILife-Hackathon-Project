@@ -67,6 +67,7 @@ Developed an AI Driven Personalization Platform for SBI Life as part of a hackat
 ### 🏗 Model Architecture
 <img width="1686" height="927" alt="image" src="https://github.com/user-attachments/assets/fa5c5a80-4686-4877-bb39-9831dc698c92" />
 <img width="1809" height="898" alt="image" src="https://github.com/user-attachments/assets/91091a36-8c69-4f6a-a788-65ef940e6269" />
+<img width="1833" height="802" alt="image" src="https://github.com/user-attachments/assets/e7ef760b-9ad6-4422-a036-636b2dd6e6d2" />
 
 ---
 
